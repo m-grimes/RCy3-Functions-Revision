@@ -35,7 +35,7 @@ sessionInfo()
 # ------------------------------------------------------------------------
 # First task: convert functions to display CFN and CCCN for https://cynetworkbrowser.umt.edu
 # Note: For  For createNetworkFromDataFrames {RCy3}, in the node file, the first column must be named "id". 
-# In edge files, the first two colums must be named "source" and "target"; and "edgeType" is no longer used, replaced with "interaction". For converting files we may wish to use this function:
+# In edge files, the first two columns must be named "source" and "target"; and "edgeType" is no longer used, replaced with "interaction". For converting files we may wish to use this function:
 
 edgeType.to.interaction <- function(net.edges) {
     names(net.edges)[1:2] <- c("source", "target")
@@ -142,7 +142,7 @@ setEdgeWidths.RCy32 <- function (edgefile, factor=1.2, log=TRUE)	{
     edgevalues['Weight'] <- line.widths
     setEdgeLineWidthBypass(edgevalues[['name']], edgevalues[['Weight']])
     # Not working:
-    # setEdgeLineWidthMapping("Weight", table.column.values=edgefile$Weight, mapping.type = "c", widths=line.widths, default.width=1.2) 
+    # setEdgeLineWidthMapping("Weight", table.column.values=edgefile$Weight, mapping.type = "d", widths=line.widths, default.width=1.2) 
     # for testing:
     # return(data.frame(edgefile$Weight, line.widths))
 }
@@ -224,6 +224,11 @@ ratioProps.RCy32 <- function (nodefile, plotcol="Total") {
 # ✓
 # Intensity props
 intensityprops.RCy32 <- function (nodefile, plotcol="Total.Phosphorylation") {
+    if(!(plotcol %in% getTableColumnNames('node'))){
+        print (getTableColumnNames('node'))
+        cat("\n","\n","\t", "Which attribute will set node size and color?")
+        plotcol <- as.character(readLines(con = stdin(), n = 1))
+    }
     setVisualStyle ("default")
     # print (getTableColumnNames ())
     node.sizes     = c (135, 130, 108, 75, 35, 75, 108, 130, 135)
