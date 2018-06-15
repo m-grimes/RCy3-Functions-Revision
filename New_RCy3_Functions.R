@@ -142,7 +142,7 @@ setEdgeWidths.RCy32 <- function (edgefile, factor=1.2, log=TRUE)	{
     edgevalues['Weight'] <- line.widths
     setEdgeLineWidthBypass(edgevalues[['name']], edgevalues[['Weight']])
     # Not working:
-    # setEdgeLineWidthMapping("Weight", table.column.values=edgefile$Weight, mapping.type = "c", widths=line.widths, default.width=1.2) 
+    # setEdgeLineWidthMapping("Weight", table.column.values=edgefile$Weight, mapping.type = "d", widths=line.widths, default.width=1.2) 
     # for testing:
     # return(data.frame(edgefile$Weight, line.widths))
 }
@@ -224,6 +224,14 @@ ratioProps.RCy32 <- function (nodefile, plotcol="Total") {
 # ✓
 # Intensity props
 intensityprops.RCy32 <- function (nodefile, plotcol="Total.Phosphorylation") {
+<<<<<<< HEAD
+    if(!(plotcol %in% getTableColumnNames('node'))){
+        print (getTableColumnNames('node'))
+        cat("\n","\n","\t", "Which attribute will set node size and color?")
+        plotcol <- as.character(readLines(con = stdin(), n = 1))
+    }
+=======
+>>>>>>> b224746c4fed5fb75d4b3a06774187588dd9f560
     setVisualStyle ("default")
     # print (getTableColumnNames ())
     node.sizes     = c (135, 130, 108, 75, 35, 75, 108, 130, 135)
