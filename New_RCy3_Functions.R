@@ -7,7 +7,8 @@
 # ------------------------------------------------------------------------
 # To UpDATE
 # source("http://www.bioconductor.org/biocLite.R")
-# biocLite("RCy3") 
+# biocLite("RCy3")
+# biocLite("BiocStyle")
 library(devtools)
 library(RCy3)
 library(plyr)
@@ -16,6 +17,7 @@ library(RColorBrewer)
 library(gplots)
 library(igraph)
 library(knitr)
+library("BiocStyle")
 options(stringsAsFactors=FALSE)
 
 # There are several resources available:
@@ -252,11 +254,12 @@ intensityprops.RCy32 <- function (nodefile, plotcol="Total.Phosphorylation") {
     setNodeSizeMapping (names(nodefile[plotcol]), size.control.points, node.sizes)
 }
 # ✓
+# Function to retrive edge names in Cytoscape style from the edge data file. 
+getCyEdgeNames.RCy32 <- function(edgefile) {
+     	cyedges <- mapply(paste, edgefile $source, " (", edgefile $interaction, ") ", edgefile $target, sep="")
+     	return(cyedges)
+     }
+# ✓
 
 
-
-
-
-
-
-# Alex: Regarding your question about meta nodes: yes, there are grouping functions. Start by looking through the Swagger docs for 'group' functions: Help>Automation>CyREST Commands API (screenshot); e.g. see ?collapseGroup
+# 
