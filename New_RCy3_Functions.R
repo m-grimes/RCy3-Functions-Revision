@@ -15,6 +15,8 @@ library(dplyr)
 library(RColorBrewer)
 library(gplots)
 library(igraph)
+library(knitr)
+options(stringsAsFactors=FALSE)
 
 # There are several resources available:
 browseVignettes('RCy3')
@@ -224,14 +226,11 @@ ratioProps.RCy32 <- function (nodefile, plotcol="Total") {
 # ✓
 # Intensity props
 intensityprops.RCy32 <- function (nodefile, plotcol="Total.Phosphorylation") {
-<<<<<<< HEAD
     if(!(plotcol %in% getTableColumnNames('node'))){
         print (getTableColumnNames('node'))
         cat("\n","\n","\t", "Which attribute will set node size and color?")
         plotcol <- as.character(readLines(con = stdin(), n = 1))
     }
-=======
->>>>>>> b224746c4fed5fb75d4b3a06774187588dd9f560
     setVisualStyle ("default")
     # print (getTableColumnNames ())
     node.sizes     = c (135, 130, 108, 75, 35, 75, 108, 130, 135)
