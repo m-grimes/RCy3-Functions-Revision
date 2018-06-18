@@ -50,6 +50,32 @@ colnames(net2.edges)[1:3]<-c("source", "target", "interaction")
 net.suid <- createNetworkFromDataFrames(net.cf, net2.edges, title=paste(paste(nodenames,  collapse=" to "), 1+length(getNetworkList())), collection = "Bromodomain Interactions")
 #```
 #This shows all the edges between interacting proteins when there are multiple interactions. 
+# _________________________________________________________________________________
+# Make a table of these data for vignette
+options(useFancyQuotes = FALSE)
+cat(dQuote(net.cf$id), sep=", ")
+cat(dQuote(net.cf$parent), sep=", ")
+cat(dQuote(net.cf$Node.ID), sep=", ")
+cat(dQuote(net.edges$source), sep=", ")
+cat(dQuote(net.edges$target), sep=", ")
+cat(net.edges$Weight, sep=", ")
+
+# _________________________________________________________________________________
+
+# Define node data 
+net.nodes <- c("ALK", "ALK p Y1078", "ALK p Y1096", "ALK p Y1586", "CTNND1", "CTNND1 p Y193", "CTNND1 p Y217", "CTNND1 p Y228", "CTNND1 p Y241", "CTNND1 p Y248", "CTNND1 p Y302", "CTNND1 p Y904", "CTTN", "CTTN ack K107", "CTTN ack K124", "CTTN ack K147", "CTTN ack K161", "CTTN ack K235", "CTTN ack K390", "CTTN ack K87", "CTTN p S113", "CTTN p S224", "CTTN p Y104", "CTTN p Y154", "CTTN p Y162", "CTTN p Y228", "CTTN p Y334", "CTTN p Y421", "IRS1", "IRS1 p Y632", "IRS1 p Y941", "IRS1 p Y989", "NPM1", "NPM1 ack K154", "NPM1 ack K223", "NPM1 p S214", "NPM1 p S218")
+net.genes <- sapply(net.nodes,  function (x) unlist(strsplit(x, " ",  fixed=TRUE))[1])
+parent <- c("", "ALK", "ALK", "ALK", "", "CTNND1", "CTNND1", "CTNND1", "CTNND1", "CTNND1", "CTNND1", "CTNND1", "", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "", "IRS1", "IRS1", "IRS1", "", "NPM1", "NPM1", "NPM1", "NPM1")
+nodeType <- c("protein", "modification", "modification", "modification", "protein", "modification", "modification", "modification", "modification", "modification", "modification", "modification", "protein", "modification", "modification", "modification", "modification", "modification", "modification", "modification", "modification", "modification", "modification", "modification", "modification", "modification", "modification", "modification", "protein", "modification", "modification", "modification", "protein", "modification", "modification", "modification", "modification")
+netnodes.df <- data.frame(id=net.nodes, Gene.Name=net.genes, parent, nodeType)
+# Define edge data
+source.nodes <- c("ALK", "ALK", "ALK", "CTNND1", "CTNND1", "CTNND1", "CTNND1", "CTNND1", "CTNND1", "CTNND1", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "CTTN", "IRS1", "IRS1", "IRS1", "NPM1", "NPM1", "NPM1", "NPM1", "ALK p Y1096", "CTNND1 p Y193", "CTNND1 p Y193", "CTNND1 p Y228", "CTNND1 p Y904", "CTNND1 p Y217", "CTNND1 p Y241", "CTNND1 p Y248", "ALK p Y1078", "ALK p Y1096", "ALK p Y1586", "IRS1 p Y941", "CTTN ack K147", "CTTN ack K107", "CTTN ack K235", "CTTN ack K87", "CTTN ack K147", "CTTN ack K124", "CTTN ack K147", "CTTN ack K235", "CTTN ack K161", "CTTN ack K390", "NPM1 ack K223", "NPM1 ack K154", "NPM1 ack K223", "ALK", "CTNND1", "CTNND1", "CTTN", "IRS1")
+target.nodes <- c("ALK p Y1078", "ALK p Y1096", "ALK p Y1586", "CTNND1 p Y193", "CTNND1 p Y217", "CTNND1 p Y228", "CTNND1 p Y241", "CTNND1 p Y248", "CTNND1 p Y302", "CTNND1 p Y904", "CTTN ack K107", "CTTN ack K124", "CTTN ack K147", "CTTN ack K161", "CTTN ack K235", "CTTN ack K390", "CTTN ack K87", "CTTN p S113", "CTTN p S224", "CTTN p Y104", "CTTN p Y154", "CTTN p Y162", "CTTN p Y228", "CTTN p Y334", "CTTN p Y421", "IRS1 p Y632", "IRS1 p Y941", "IRS1 p Y989", "NPM1 ack K154", "NPM1 ack K223", "NPM1 p S214", "NPM1 p S218", "ALK p Y1586", "CTNND1 p Y228", "CTNND1 p Y302", "CTNND1 p Y302", "CTTN p Y154", "CTTN p Y162", "CTTN p Y162", "CTTN p Y334", "IRS1 p Y632", "IRS1 p Y989", "IRS1 p Y989", "IRS1 p Y989", "CTTN p S113", "CTTN p S224", "CTTN p S224", "CTTN p S224", "CTTN p Y104", "CTTN p Y228", "CTTN p Y228", "CTTN p Y228", "CTTN p Y421", "CTTN p Y421", "NPM1 p S214", "NPM1 p S218", "NPM1 p S218", "IRS1", "CTTN", "IRS1", "NPM1", "NPM1")
+Weight <- c(100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 0.8060606, 0.7575758, 0.7454545, 0.9393939, 0.8949096, 0.7329699, 0.7553845, 0.7866191, 0.775, 0.6969697, 0.7818182, 0.8424242, -0.7714286, -0.8385965, -0.5017544, -0.7473684, -0.5252838, -0.9428571, -0.8285714, -0.6713287, -0.5508772, -0.9428571, -0.8857143, -0.6310881, -0.8285714, 0.6123365, 2.115272, 0.002461723, 0.3354451, 0.5661711)
+netedges.df <- data.frame(source=source.nodes, target=target.nodes, Weight)
+net.suid <- createNetworkFromDataFrames(netnodes.df, netedges.df, title=paste(paste("Group Nodes Test"), 1+length(getNetworkList())), collection = "RCy3 Vignettes")
+layoutNetwork('force-directed defaultSpringCoefficient=0.00001 defaultSpringLength=50 defaultNodeMass=5')
+
 
 # Apply style from New_RCy3_Functions
 

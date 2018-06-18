@@ -15,6 +15,8 @@ library(dplyr)
 library(RColorBrewer)
 library(gplots)
 library(igraph)
+library(knitr)
+options(stringsAsFactors=FALSE)
 
 # There are several resources available:
 browseVignettes('RCy3')
