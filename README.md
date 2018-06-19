@@ -11,5 +11,7 @@ The new fuctions are based on Alex Pico's cyREST work and suggestions.
 
 Functions entered so far: edgeType.to.interaction; mergeEdges.dir; mergeEdges.RCy32; edgeDprops.RCy32; nodeDprops.RCy32; setEdgeWidths.RCy32; intensityProps.RCy32; getCyEdgeNames.RCy32; extract.peptides.RCy32; graphNetworkPath.RCy32.
 
+Also created a function to collapse all or selective nodes: collapse.CCCN.nodes.
+
 
 

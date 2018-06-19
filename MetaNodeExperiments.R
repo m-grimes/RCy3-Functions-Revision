@@ -192,3 +192,27 @@ collapseGroup(genes)
 #   at java.lang.Thread.run(Thread.java:748)
 # java.lang.NullPointerException 
 #... 
+# Test graphNetworkPath.RCy32
+test.edges <- connectNodes.all(c("EGFR", "SMARCA4"), ig.graph=essl.cfn.ig, edgefile=essl.cfn)
+test.result <- graphNetworkPath.RCy32(nodenames=c("EGFR", "SMARCA4"), path.edges=test.edges, ptmedgefile=essl.cccnplus.edges, datacolumns=geldexpts.nc, geneatts=essl.netatts, ptmcccnatts=essl.ptmcccnatts, edgeMerge=FALSE)
+
+nodedata <- getTableColumns("node")
+edgedata <- getTableColumns("edge")
+
+# Create function to collapse all or selective nodes
+
+collapse.CCCN.nodes <- function(nodenames=NULL) {
+    nodedata <- getTableColumns("node", columns = c("id", "Gene.Name", "parent", "Node.ID"))
+    genes <- nodedata[grep("gene", nodedata$Node.ID), "id"]
+    if (length(nodenames) > 0) {
+        genes <- nodenames
+    } 
+    sapply(genes, function(x) createGroup(x, nodes=nodedata[grep(x, nodedata$Gene.Name), "id"], nodes.by.col = "id"))
+    collapseGroup(genes)
+}
+ 
+collapse.CCCN.nodes( c("CDK1",    "CRK",     "DDX5"))
+expandGroup(c("CDK1",    "CRK",     "DDX5"))
+deleteGroup()
+collapse.CCCN.nodes()
+expandGroup("all")
