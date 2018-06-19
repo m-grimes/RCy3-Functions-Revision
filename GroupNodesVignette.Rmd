@@ -113,6 +113,7 @@ Let's create a new group of the selected nodes and collapse it into one node, th
 For these data, we can create groups of all proteins together with their modifications. Here we name the groups by their gene names.
  
 ```{r Create groups for all proteins - loop version}
+deleteGroup("delta catenin group")
 for(i in 1:length(genes)) {
     print(genes[i])
     selectNodes(netnodes.df[grep(genes[i], netnodes.df$Gene.Name), "id"], by.col="id", preserve=F)
@@ -129,18 +130,26 @@ expandGroup(genes)
 An alternative method that might be quicker for large networks is to use the input data frame.
 
 ```{r Alternative methods for creating groups}
+deleteGroup(genes)
 for(i in 1:length(genes)) {
     print(genes[i])
     createGroup(genes[i], nodes=netnodes.df[grep(genes[i], netnodes.df$Gene.Name), "id"], nodes.by.col = "id")
 }
 collapseGroup(genes)
 expandGroup(genes)
-# Or more simply:
+```
+### This can be done more simply using sapply(), and groups' information can be retrieved.
+```{r Create groups using data frame and get group info}
+deleteGroup(genes)
 sapply(genes, function(x) createGroup(x, nodes=netnodes.df[grep(x, netnodes.df$Gene.Name), "id"], nodes.by.col = "id"))
 collapseGroup(genes)
+getGroupInfo("ALK")
 expandGroup("ALK")
+getGroupInfo("ALK")
 groups.2 <- listGroups()
-# Get all group's info
+## Alex: note Error Here under RCy3 2.0.5; was fixed under 2.0.5 but error returned.
+listGroups()$groups[1]
+# Get all groups' info
 group.info <- list()
 group.info <- lapply(listGroups()$groups, getGroupInfo)
 print(group.info)

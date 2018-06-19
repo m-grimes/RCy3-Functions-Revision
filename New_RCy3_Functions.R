@@ -19,7 +19,7 @@ library(igraph)
 library(knitr)
 library("BiocStyle")
 options(stringsAsFactors=FALSE)
-
+#
 # There are several resources available:
 browseVignettes('RCy3')
 # https://github.com/cytoscape/RCy3/wiki/Upgrading-Existing-Scripts
@@ -261,5 +261,73 @@ getCyEdgeNames.RCy32 <- function(edgefile) {
      }
 # ✓
 
+extract.peptides <- function(nodename, edgefile=pepnet.edges) {
+    peps.1 <- edgefile$Gene.1[grep(nodename, edgefile$Gene.1, fixed=TRUE)]
+    peps.2 <- edgefile$Gene.2[grep(nodename, edgefile$Gene.2, fixed=TRUE)]
+    return(unique(c(peps.1, peps.2)))
+}
+extract.peptides.RCy32 <- function(nodename, edgefile=pepnet.edges) {
+    peps.1 <- edgefile$source[grep(nodename, edgefile$source, fixed=TRUE)]
+    peps.2 <- edgefile$target[grep(nodename, edgefile$target, fixed=TRUE)]
+    return(as.character(unique(c(peps.1, peps.2))))
+}
+#  
 
-# 
+# For the lung cancer CFN/CCCN project and website.
+# This function uses existing data frame names and converts names before graphing. Merging edges is now optional.
+graphNetworkPath.RCy32 <- function(nodenames, path.edges, ptmedgefile, datacolumns=names(ld.fc), geneatts, ptmcccnatts, edgeMerge=TRUE)	{
+    path.nodes <- unique(c(as.character(path.edges$Gene.1), as.character(path.edges$Gene.2)))
+    # Get peptides from this network
+    netpeps <- unlist(sapply(path.nodes, extract.peptides, ptmedgefile))  
+    pepnodes.df <- data.frame(netpeps, pep.nodes=(sapply(netpeps, function(x) unlist(strsplit(x, " "))[1])))
+    netpeps <- pepnodes.df[pepnodes.df$pep.nodes %in% path.nodes, 1]
+    ptm.cccn <-	filter.edges.0(netpeps, ptmedgefile) 
+    if (edgeMerge==TRUE){
+        net.full <- mergeEdges(path.edges) } else {
+            net.full <- path.edges
+        }
+    net.full$Alt.Weight <- net.full$Weight
+    net.gene.cf <- make.anynetcf(edge.df=net.full, data.file=ldgene.fc[, datacolumns], geneatts=geneatts, ptmcccnatts=ptmcccnatts, func.key=func.key, use=c("total", "mean", "median", "max"))
+    net.pep.cf <- make.anynetcf(edge.df=ptm.cccn, data.file=ld.fc[, datacolumns], geneatts=geneatts, ptmcccnatts=ptmcccnatts, func.key=func.key, use=c("total", "mean", "median"))
+    # combine node attribute cytoscape file
+    net.cf <- harmonize_cfs3(pepcf=net.pep.cf, genecf=net.gene.cf)
+    # make gene-peptide edges
+    net.gpe <- data.frame(Gene.1=net.pep.cf$Gene.Name, Gene.2=net.pep.cf$Peptide.Name, edgeType="peptide", Weight=100, Alt.Weight=1)
+    # net.gpe <- genepep.edges(ptm.cccn)
+    # combine edge files
+    net.full <- net.full[, c("Gene.1", "Gene.2", "Weight", "edgeType", "Alt.Weight")]
+    net.edges <- rbind(net.gpe, ptm.cccn, net.full)
+    # Graph in RCy3 2.N; change names of data columns
+    names(net.cf)[1] <- "id"
+    net.edges <- edgeType.to.interaction(net.edges)
+    net.suid <- createNetworkFromDataFrames(net.cf, net.edges, title=paste(paste(nodenames,  collapse=" to "), 1+length(getNetworkList())), collection = "Graph Network Path Collection")
+    layoutNetwork('force-directed defaultSpringCoefficient=0.00001 defaultSpringLength=50 defaultNodeMass=5')
+    nodeDprops.RCy32(net.cf)
+    ratioProps.RCy32(net.cf, "Total")
+    edgeDprops.RCy32()
+    setEdgeWidths.RCy32(net.edges)    
+    #Change the appearance of protein-PTM edges
+    allwedges <- getAllEdges()
+    prpepedges <- allwedges[grep("peptide", allwedges)]
+    setEdgeColorBypass(prpepedges, new.colors="#808080")
+    setEdgeLineWidthBypass(prpepedges, new.widths = 2)
+    setBackgroundColorDefault(col2hex('grey80'))
+    new.style <- "Graph Network Path Style"
+    copyVisualStyle("default", new.style)
+    setVisualStyle(new.style)
+    return(list(net.cf, net.edges))   
+}
+# ✓
+#
+# Test
+#test.edges <- connectNodes.all(c("EGFR", "SMARCA4"), ig.graph=essl.cfn.ig, edgefile=essl.cfn)
+#test.result <- graphNetworkPath.RCy32(nodenames=c("EGFR", "SMARCA4"), path.edges=test.edges, ptmedgefile=essl.cccnplus.edges, datacolumns=geldexpts.nc, geneatts=essl.netatts, ptmcccnatts=essl.ptmcccnatts, edgeMerge=FALSE)
+
+
+
+# - - - - - - - - - - - - 
+Test.RCy32 <- function(){
+    print("RCy3 2.N.N Functions Loaded!")
+}
+# - - - - - - - - - - - - 
+Test.RCy32()
