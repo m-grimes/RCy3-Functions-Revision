@@ -9,6 +9,9 @@
 # source("http://www.bioconductor.org/biocLite.R")
 # biocLite("RCy3")
 # biocLite("BiocStyle")
+# Try the latest version of RCy3 by running:
+install.packages("BiocManager")
+BiocManager::install("RCy3")
 library(devtools)
 library(RCy3)
 library(plyr)

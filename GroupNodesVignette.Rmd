@@ -147,7 +147,7 @@ getGroupInfo("ALK")
 expandGroup("ALK")
 getGroupInfo("ALK")
 groups.2 <- listGroups()
-## Alex: note Error Here under RCy3 2.0.5; was fixed under 2.0.5 but error returned.
+#
 listGroups()$groups[1]
 # Get all groups' info
 group.info <- list()
@@ -155,7 +155,8 @@ group.info <- lapply(listGroups()$groups, getGroupInfo)
 print(group.info)
 #
 ```
-
+# Alex: note Error Here under RCy3 2.0.5: Move one node in any subnetwork and Cytoscxape and R both hang when the following command is given. 
+collapseGroup(genes)
 
 Reference
 

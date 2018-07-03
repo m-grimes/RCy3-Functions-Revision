@@ -7,9 +7,10 @@ here <- getwd()
 computer <- paste("", unlist(strsplit(here, "/"))[2], unlist(strsplit(here, "/"))[3], collapse = NULL, sep = "/")
 directory <- "/Dropbox/_Work/R_/_RCy3\ future\ discussion/RCy3-Functions-Revision/"
 file <- "New_RCy3_Functions.R"
-dir.file <- "/Dropbox/_Work/R_/_RCy3\ future\ discussion/RCy3-Functions-Revision/New_RCy3_Functions.R"
 source(paste(computer, directory, file, sep=""))
-source(paste(computer, dir.file, sep=""))
+# alternatively
+# dir.file <- "/Dropbox/_Work/R_/_RCy3\ future\ discussion/RCy3-Functions-Revision/New_RCy3_Functions.R"
+# source(paste(computer, dir.file, sep=""))
 ls(pat="RCy32")
 #------------------------------------------------------------
 # Use network from FigureVignette (or just skip this section and open MetaNodeTestNetwork.cys)
