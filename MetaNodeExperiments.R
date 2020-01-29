@@ -1,5 +1,8 @@
 # Metanode experiments
-
+localpath = getwd()	
+comp_path <- unlist(strsplit(localpath, "Dropbox"))[[1]]
+# To load original packages
+source(paste(comp_path, "Dropbox/_Work/R_/MG_packages.R", sep=""))
 # Mark Grimes
 source("New_RCy3_Functions.R")
 # To source from either computer
