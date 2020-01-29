@@ -22,6 +22,7 @@ knitr::opts_chunk$set(
 This vignette will show you how to use node grouping functions to manipulate graphs in Cytoscape.
 
 # Installation
+#New comment
 ```{r}
 if(!"RCy3" %in% installed.packages()){
     source("https://bioconductor.org/biocLite.R")
